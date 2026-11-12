@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#182b49">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Life HQ">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>My Life HQ</title>
+<style>
+:root{--navy:#182b49;--blue:#4169b2;--bg:#f3f5f8;--card:#fff;--ink:#202938;--muted:#697586;--line:#e5e9ef;--gold:#d6a43b;--shadow:0 5px 22px #172b4810}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+button,input,textarea{font:inherit}button{cursor:pointer}
+.top{background:var(--navy);color:white;padding:calc(20px + env(safe-area-inset-top)) 20px 22px;border-radius:0 0 24px 24px}
+.topline{display:flex;justify-content:space-between;align-items:center}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;font-weight:700}
+h1{font-size:27px;letter-spacing:-.7px;margin:4px 0 0}.today{font-size:12px;opacity:.75;text-align:right}
+.greeting{margin-top:22px;font-size:19px;font-weight:650}.sub{font-size:13px;opacity:.75;margin-top:3px}
+.wrap{max-width:760px;margin:auto;padding:18px 16px 30px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:8px 2px 12px}.section-head h2{font-size:17px;margin:0}.muted{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.tile{border:1px solid var(--line);background:var(--card);border-radius:17px;padding:15px;text-align:left;box-shadow:var(--shadow);color:var(--ink);min-height:112px}
+.tile:active{transform:scale(.985)}.tile .emoji{font-size:23px}.tile strong{display:block;margin-top:8px;font-size:14px}.tile small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.app{background:white;border:1px solid var(--line);border-radius:14px;padding:12px 4px;text-align:center;text-decoration:none;color:var(--ink);font-size:11px;font-weight:650}
+.app b{display:block;font-size:20px;margin-bottom:4px}
+.panel{background:white;border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:var(--shadow);margin-top:12px}
+.quickrow{display:flex;gap:8px;align-items:center}.quickrow input{min-width:0;flex:1}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px;background:#fbfcfe;color:var(--ink);outline:none}
+textarea{min-height:100px;resize:vertical}
+.primary{background:var(--blue);color:white;border:0;border-radius:11px;padding:11px 14px;font-weight:650}
+.ghost{background:#edf1f7;color:var(--navy);border:0;border-radius:10px;padding:9px 11px;font-weight:650}
+.task{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.task:last-child{border:0}
+.task input[type=checkbox]{width:18px;height:18px;accent-color:var(--blue)}.task.done span{text-decoration:line-through;color:#929baa}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;z-index:5}
+.nav button{border:0;background:none;color:var(--muted);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px}
+.nav button span{font-size:19px}.nav button.active{color:var(--blue);font-weight:750}
+.view{display:none}.view.active{display:block}
+.back{border:0;background:none;color:var(--blue);font-weight:700;padding:0;margin:2px 0 14px}
+.viewtitle{font-size:23px;margin:0 0 4px}.viewdesc{color:var(--muted);font-size:13px;margin:0 0 16px}
+.linklist a{display:flex;justify-content:space-between;padding:12px 0;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);font-weight:600}
+.linklist a:last-child{border:0}.linklist span{color:var(--blue)}
+.notice{background:#f8f3e8;border:1px solid #efe2c5;border-radius:13px;padding:12px;color:#6d572b;font-size:12px;margin-top:14px}
+.empty{color:var(--muted);font-size:13px;padding:10px 0}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,1fr)}.tile{min-height:125px}.top{padding-left:max(24px,calc((100% - 720px)/2));padding-right:max(24px,calc((100% - 720px)/2))}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="topline"><div><div class="eyebrow">Personal command center</div><h1>My Life HQ</h1></div><div class="today" id="date"></div></div>
+ <div class="greeting">Your life, organized.</div><div class="sub">A calm place to decide what matters next.</div>
+</header>
+<main class="wrap">
+ <section id="home" class="view active">
+  <div class="section-head"><h2>Your spaces</h2><span class="muted">Tap to open</span></div>
+  <div class="grid" id="spaceGrid"></div>
+  <div class="section-head" style="margin-top:23px"><h2>Google workspace</h2><span class="muted">Your everyday tools</span></div>
+  <div class="apps">
+   <a class="app" href="https://tasks.google.com/" target="_blank" rel="noopener"><b>✓</b>Tasks</a>
+   <a class="app" href="https://keep.google.com/" target="_blank" rel="noopener"><b>✎</b>Keep</a>
+   <a class="app" href="https://calendar.google.com/" target="_blank" rel="noopener"><b>▦</b>Calendar</a>
+   <a class="app" href="https://drive.google.com/" target="_blank" rel="noopener"><b>▱</b>Drive</a>
+  </div>
+  <div class="panel">
+   <div class="section-head"><h2>Today's focus</h2><span class="muted">Saved on this device</span></div>
+   <div class="quickrow"><input id="newTask" placeholder="Add a task to your HQ list"><button class="primary" id="addTask">Add</button></div>
+   <div id="taskList" style="margin-top:8px"></div>
+  </div>
+  <div class="notice">Use Google Tasks for your main reminders and due dates. This small HQ list is for quick capture; it stays on this device and does not sync to Google.</div>
+ </section>
+ <section id="detail" class="view">
+  <button class="back" id="backHome">← All spaces</button>
+  <h2 class="viewtitle" id="detailTitle"></h2><p class="viewdesc" id="detailDesc"></p>
+  <div class="panel" id="detailPanel"></div>
+ </section>
+</main>
+<nav class="nav">
+ <button class="active" data-view="home"><span>⌂</span>Home</button>
+ <button data-space="tasks"><span>✓</span>Tasks</button>
+ <button data-space="projects"><span>▦</span>Projects</button>
+ <button data-space="shopping"><span>🛒</span>Shopping</button>
+ <button data-space="family"><span>♡</span>Family</button>
+</nav>
+<script>
+const spaces=[
+ {id:'home',name:'Home',icon:'⌂',desc:'Household information, maintenance, and home projects.',hint:'Keep appliance details, paint colors, contractor information, warranties, and maintenance notes here.'},
+ {id:'family',name:'Family',icon:'♡',desc:'Family schedules, school information, plans, and shared details.',hint:'Use this space for school links, activity schedules, family routines, and important reference notes.'},
+ {id:'finances',name:'Finances',icon:'$',desc:'A home for financial planning and important account references.',hint:'Keep budgets, financial goals, renewal dates, and links to secure financial providers. Avoid storing passwords or full account numbers here.'},
+ {id:'vehicles',name:'Vehicles',icon:'🚙',desc:'Vehicle details, maintenance history, and upcoming service.',hint:'Record make/model, mileage, service dates, tire details, and links to manuals or service records.'},
+ {id:'projects',name:'Projects',icon:'▦',desc:'A place to organize bigger efforts into manageable next steps.',hint:'Give each project a clear outcome, useful notes, and next actions. Put dated actions in Google Tasks.'},
+ {id:'shopping',name:'Shopping',icon:'🛒',desc:'Lists for groceries, household supplies, and things to compare.',hint:'Use Google Keep for shared shopping lists. Add your most-used lists and store links here.'},
+ {id:'tasks',name:'Tasks',icon:'✓',desc:'Your action center: what needs doing next.',hint:'Use Google Tasks for reminders, due dates, recurring tasks, and lists you need across devices.'}
+];
+const storeKey='myLifeHQ.v1';
+let data={notes:{},tasks:[]};
+try{data={...data,...JSON.parse(localStorage.getItem(storeKey)||'{}')}}catch(e){}
+function save(){localStorage.setItem(storeKey,JSON.stringify(data))}
+function el(tag,attrs={},text=''){const n=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));if(text)n.textContent=text;return n}
+const grid=document.getElementById('spaceGrid');
+spaces.filter(s=>s.id!=='home').forEach(s=>{const b=el('button',{class:'tile','data-space':s.id});b.innerHTML=`<div class="emoji">${s.icon}</div><strong>${s.name}</strong><small>${s.desc}</small>`;grid.appendChild(b)});
+function showSpace(id){const s=spaces.find(x=>x.id===id);if(!s)return;document.getElementById('home').classList.remove('active');document.getElementById('detail').classList.add('active');document.getElementById('detailTitle').textContent=s.name;document.getElementById('detailDesc').textContent=s.desc;
+ const panel=document.getElementById('detailPanel');panel.innerHTML='';const p=el('p',{class:'muted'},s.hint);panel.appendChild(p);
+ const label=el('label',{},'Notes for this space');label.style.cssText='display:block;font-weight:700;margin:14px 0 7px';panel.appendChild(label);
+ const area=el('textarea',{placeholder:'Add useful notes, links, measurements, ideas, or reference details…'});area.value=data.notes[id]||'';area.addEventListener('input',()=>{data.notes[id]=area.value;save()});panel.appendChild(area);
+ const links=el('div',{class:'linklist'});links.style.marginTop='16px';
+ const external=[['Google Tasks','https://tasks.google.com/'],['Google Keep','https://keep.google.com/'],['Google Drive','https://drive.google.com/'],['Google Calendar','https://calendar.google.com/']];
+ external.forEach(([name,url])=>{const a=el('a',{href:url,target:'_blank',rel:'noopener'});a.append(el('span',{},name),el('span',{},'Open ↗'));links.appendChild(a)});
+ panel.appendChild(links);
+ document.querySelectorAll('.nav button').forEach(n=>n.classList.toggle('active',n.dataset.space===id));
+}
+function showHome(){document.getElementById('detail').classList.remove('active');document.getElementById('home').classList.add('active');document.querySelectorAll('.nav button').forEach(n=>n.classList.toggle('active',n.dataset.view==='home'))}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-space]');if(b)showSpace(b.dataset.space);const v=e.target.closest('[data-view]');if(v)showHome()});
+document.getElementById('backHome').onclick=showHome;
+function renderTasks(){const box=document.getElementById('taskList');box.innerHTML='';if(!data.tasks.length){box.appendChild(el('div',{class:'empty'},'No quick tasks yet. Add one above.'));return}
+ data.tasks.forEach((t,i)=>{const row=el('div',{class:'task'+(t.done?' done':'')});const cb=el('input',{type:'checkbox'});cb.checked=!!t.done;cb.onchange=()=>{data.tasks[i].done=cb.checked;save();renderTasks()};row.append(cb,el('span',{},t.text));const del=el('button',{class:'ghost',type:'button'},'×');del.style.marginLeft='auto';del.onclick=()=>{data.tasks.splice(i,1);save();renderTasks()};row.appendChild(del);box.appendChild(row)})}
+function addTask(){const input=document.getElementById('newTask');const text=input.value.trim();if(!text)return;data.tasks.unshift({text,done:false});input.value='';save();renderTasks()}
+document.getElementById('addTask').onclick=addTask;document.getElementById('newTask').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
+document.getElementById('date').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+renderTasks();
+if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
